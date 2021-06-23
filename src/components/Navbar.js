@@ -134,7 +134,7 @@ const Navbar = () => {
     return (
         <div className={classes.grow}>
             <AppBar
-                position="static"
+                position="fixed"
                 style={{ background: "#fff", color: "#321c59" }}
             >
                 <Toolbar>

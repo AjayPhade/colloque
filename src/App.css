@@ -2,6 +2,9 @@
     margin: 0;
     padding: 0;
 }
+body{
+    padding-top: 10vh !important;
+}
 
 .loader {
     height: 90vh;
