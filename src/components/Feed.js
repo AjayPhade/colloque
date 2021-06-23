@@ -21,21 +21,18 @@ const Feed = () => {
     const [threads, setThreads] = useState([]);
 
     useEffect(() => {
-        threadsRef.onSnapshot((snap) => {
+        threadsRef.onSnapshot(async (snap) => {
             const items = [];
 
-            snap.forEach(async (thread) => {
-                thread = thread.data();
-
-                await thread.postedBy.get().then((res) => {
-                    thread = { ...thread, studentName: res.data().name };
-                });
-
-                console.log("threadddddddd:", thread);
-                items.push(thread);
+            snap.forEach((thread) => {
+                items.push(thread.data());
             });
 
-            console.log("Items:", items);
+            for (const item of items) {
+                const student = await item.postedBy.get();
+                item.studentName = student.data().name;
+            }
+
             setThreads(items);
         });
     }, []);
@@ -46,7 +43,6 @@ const Feed = () => {
         <div>
             <List component="nav" className={classes.root} aria-label="threads">
                 {threads.map((thread) => {
-                    console.log("Thread", thread, thread.studentName);
                     return (
                         <ListItem button divider alignItems="flex-start">
                             <ListItemText
