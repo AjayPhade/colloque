@@ -25,8 +25,8 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
+            <Link color="inherit" href="#">
+                Colloque
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}
@@ -73,8 +73,7 @@ const SignIn = ({ history }) => {
 
     if (currentUser) return <Redirect to="/" />;
 
-    if (currentUser === "")    
-        return <Loading/>
+    if (currentUser === "") return <Loading />;
 
     return (
         <Container component="main" maxWidth="xs">
@@ -110,10 +109,6 @@ const SignIn = ({ history }) => {
                         id="password"
                         autoComplete="current-password"
                         onChange={handleChange}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
                     />
                     <Button
                         type="submit"

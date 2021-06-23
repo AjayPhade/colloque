@@ -5,7 +5,7 @@ const Loading = () => {
         <div className="loader">
             <img src="./loading.gif" />
         </div>
-    )
-}
+    );
+};
 
 export default Loading;

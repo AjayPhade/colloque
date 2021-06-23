@@ -2,9 +2,7 @@ import { auth, firestore } from "./config";
 
 const signIn = ({ email, password }) => {
     auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            
-        })
+        .then((userCredential) => {})
         .catch((error) => {
             console.error(error);
         });
@@ -20,7 +18,10 @@ const signUp = (user) => {
 
     auth.createUserWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            userCredential.user.sendEmailVerification();
+            userCredential.user
+                .updateProfile({ displayName: name })
+                .then(() => userCredential.user.sendEmailVerification())
+                .catch((error) => console.log(error));
 
             const uid = userCredential.user.uid;
             const studentsRef = firestore.collection("students");

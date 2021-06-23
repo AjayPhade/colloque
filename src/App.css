@@ -3,20 +3,20 @@
     padding: 0;
 }
 
-.loader{
+.loader {
     height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.emailVerify{
+.emailVerify {
     height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-img{
+img {
     max-width: 100%;
 }

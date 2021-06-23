@@ -1,10 +1,11 @@
 import React from "react";
-import { auth } from "../firebase/config";
+
+import Navbar from "./Navbar";
 
 const Home = () => {
     return (
         <div>
-            <button onClick={() => auth.signOut()}>Sign Out</button>
+            <Navbar />
         </div>
     );
 };
