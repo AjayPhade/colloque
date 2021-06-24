@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { firestore } from "../firebase/config";
-import Navbar from "./Navbar";
 import { useParams } from "react-router";
-import dateFormat from "./DateFormat";
 
-const Thread = (props) => {
+import Navbar from "./Navbar";
+import dateFormat from "./DateFormat";
+import ThreadReply from "./ThreadReply";
+
+function Thread() {
     const { id } = useParams();
+    const [threadPoster, setThreadPoster] = useState(null);
     const [thread, setThread] = useState(null);
     const [facultyReplies, setFacultyReplies] = useState([]);
     const [studentReplies, setStudentReplies] = useState([]);
@@ -16,7 +19,13 @@ const Thread = (props) => {
             const data = snap.data();
             setThread(data);
 
+            await data.postedBy.get().then((snap) => {
+                setThreadPoster(snap.data());
+                console.log(snap.data());
+            });
+
             var items = [];
+
             data.facultyReplies.forEach((reply) => {
                 items.push(reply);
             });
@@ -41,38 +50,51 @@ const Thread = (props) => {
             setStudentReplies(items);
         });
     }, []);
-
     return (
         <div>
             <Navbar />
-            {thread && (
+            {thread && threadPoster && (
                 <div className="thread">
                     <div className="query">
-                        <h1>{thread.query}</h1>
-                        <h4>{thread.description}</h4>
+                        <div className="queryHead">
+                            <h1 color="primary">{thread.query}</h1>
+                            <div>
+                                <p style={{ color: "gray" }}>
+                                    {threadPoster.name}
+                                </p>
+                                <p style={{ color: "gray" }}>
+                                    {dateFormat(thread.timestamp.toDate())}
+                                </p>
+                            </div>
+                        </div>
+                        <p>{thread.description}</p>
                     </div>
                     <hr />
+                    <h2>Faculty Replies</h2>
                     <div className="facultyResponses">
                         {facultyReplies.map((reply) => {
                             return (
-                                <div>
-                                    <p>{reply.content}</p>
-                                    <p>{"replied by " + reply.facultyName}</p>
-                                    <p>
-                                        {dateFormat(reply.timestamp.toDate())}
-                                    </p>
-                                </div>
+                                <ThreadReply
+                                    content={reply.content}
+                                    date={dateFormat(reply.timestamp.toDate())}
+                                    name={reply.facultyName}
+                                    type={"faculty"}
+                                    email={threadPoster.email}
+                                />
                             );
                         })}
                     </div>
+                    <h2>Student Replies</h2>
                     <div className="studentResponses">
                         {studentReplies.map((reply) => {
                             return (
-                                <div>
-                                    <p>{reply.content}</p>
-                                    <p>{"replied by " + reply.studentName}</p>
-                                    <p>{reply.timestamp.toDate().toString()}</p>
-                                </div>
+                                <ThreadReply
+                                    content={reply.content}
+                                    date={dateFormat(reply.timestamp.toDate())}
+                                    name={reply.studentName}
+                                    type={"student"}
+                                    email={threadPoster.email}
+                                />
                             );
                         })}
                     </div>
@@ -80,6 +102,6 @@ const Thread = (props) => {
             )}{" "}
         </div>
     );
-};
+}
 
 export default Thread;

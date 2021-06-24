@@ -24,8 +24,29 @@ body{
 img {
     max-width: 100%;
 }
+
 .thread{
     width: 90%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.card{
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+}
+.query{
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+}
+hr{
+    margin-bottom: 1rem;
+}
+.cardactions{
+    justify-content: space-between !important;
+}
+.queryHead{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }

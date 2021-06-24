@@ -14,19 +14,13 @@ export default function dateFormat(date) {
         day: "2-digit",
     }).format(date);
 
-    const hours = new Intl.DateTimeFormat("en-in", {
+    const time = new Intl.DateTimeFormat("en-in", {
         timeZone: "Asia/Kolkata",
-        hour: "numeric",
-        hour12: false,
-    }).format(date);
-    const minutes = new Intl.DateTimeFormat("en-in", {
-        timeZone: "Asia/Kolkata",
-        minute: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
     }).format(date);
 
-    date = day + "-" + month + "-" + year + " at " + hours + ":" + minutes;
-
-    console.log(date);
+    date = day + "-" + month + "-" + year + " at " + time.toUpperCase();
 
     return date;
 }
