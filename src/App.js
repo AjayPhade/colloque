@@ -6,6 +6,7 @@ import SignIn from "./components/SignIn";
 import { AuthProvider } from "./components/Auth";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./components/Home";
+import Thread from "./components/Thread";
 
 import { auth } from "./firebase/config";
 
@@ -20,11 +21,8 @@ const App = () => {
                     <Route exact path="/signup">
                         <SignUp />
                     </Route>
-                    <PrivateRoute
-                        exact
-                        path="/"
-                        component={Home}
-                    />
+                    <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute path="/thread/:id" component={Thread} />
                 </Switch>
             </Router>
         </AuthProvider>

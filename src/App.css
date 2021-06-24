@@ -1,4 +1,5 @@
 * {
+    font-family: sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -7,14 +8,14 @@ body{
 }
 
 .loader {
-    height: 90vh;
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .emailVerify {
-    height: 90vh;
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,4 +23,9 @@ body{
 
 img {
     max-width: 100%;
+}
+.thread{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }

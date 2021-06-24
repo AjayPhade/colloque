@@ -3,9 +3,10 @@ import { firestore } from "../firebase/config";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Chip from "@material-ui/core/Chip";
+
+import { withRouter } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
 }));
-const Feed = () => {
+const Feed = ({ history }) => {
     const threadsRef = firestore.collection("threads");
     const [threads, setThreads] = useState([]);
 
@@ -25,7 +26,8 @@ const Feed = () => {
             const items = [];
 
             snap.forEach((thread) => {
-                items.push(thread.data());
+                const id = thread.id;
+                items.push({ ...thread.data(), id });
             });
 
             for (const item of items) {
@@ -39,17 +41,28 @@ const Feed = () => {
 
     const classes = useStyles();
 
+    const openThread = (thread) => {
+        history.push("/thread/" + thread.id);
+    };
+
     return (
         <div>
             <List component="nav" className={classes.root} aria-label="threads">
                 {threads.map((thread) => {
                     return (
-                        <ListItem button divider alignItems="flex-start">
+                        <ListItem
+                            button
+                            divider
+                            alignItems="flex-start"
+                            onClick={() => {
+                                openThread(thread);
+                            }}
+                        >
                             <ListItemText
                                 primary={thread.query}
                                 secondary={
                                     <div>
-                                        asked by {thread.studentName}
+                                        <p>asked by {thread.studentName}</p>
                                         <Chip
                                             style={{
                                                 float: "right",
@@ -68,4 +81,4 @@ const Feed = () => {
     );
 };
 
-export default Feed;
+export default withRouter(Feed);
