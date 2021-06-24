@@ -50,3 +50,13 @@ hr{
     justify-content: space-between;
     flex-wrap: wrap;
 }
+.askForm{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2%;
+}
+
+.logo{
+    cursor: pointer;
+}

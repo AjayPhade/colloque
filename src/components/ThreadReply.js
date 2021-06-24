@@ -36,7 +36,7 @@ function ThreadReply(props) {
             <CardActions className="cardactions">
                 <div>
                     <Typography className={classes.title} color="textSecondary">
-                        {props.name}
+                        {props.anonymous ? "Anonymous" : props.name}
                     </Typography>
                     <Typography
                         className={classes.title}

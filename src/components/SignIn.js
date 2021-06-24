@@ -36,14 +36,13 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+        width: "150px",
     },
     form: {
         width: "100%", // Fix IE 11 issue.
@@ -79,12 +78,7 @@ const SignIn = ({ history }) => {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
+                <img className={classes.avatar} src="./logo.png" />
                 <form className={classes.form} noValidate>
                     <TextField
                         variant="outlined"

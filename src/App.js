@@ -7,6 +7,7 @@ import { AuthProvider } from "./components/Auth";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./components/Home";
 import Thread from "./components/Thread";
+import Ask from "./components/Ask";
 
 import { auth } from "./firebase/config";
 
@@ -23,6 +24,7 @@ const App = () => {
                     </Route>
                     <PrivateRoute exact path="/" component={Home} />
                     <PrivateRoute path="/thread/:id" component={Thread} />
+                    <PrivateRoute path="/ask" component={Ask} />
                 </Switch>
             </Router>
         </AuthProvider>

@@ -60,7 +60,9 @@ function Thread() {
                             <h1 color="primary">{thread.query}</h1>
                             <div>
                                 <p style={{ color: "gray" }}>
-                                    {threadPoster.name}
+                                    {thread.anonymous
+                                        ? "Anonymous"
+                                        : threadPoster.name}
                                 </p>
                                 <p style={{ color: "gray" }}>
                                     {dateFormat(thread.timestamp.toDate())}
@@ -94,6 +96,7 @@ function Thread() {
                                     name={reply.studentName}
                                     type={"student"}
                                     email={threadPoster.email}
+                                    anonymous={reply.anonymous}
                                 />
                             );
                         })}

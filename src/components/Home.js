@@ -5,6 +5,7 @@ import Feed from "./Feed";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     margin: {
@@ -20,12 +21,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 const Home = () => {
+    const history = useHistory();
     const classes = useStyles();
     return (
         <div>
             <Navbar />
             <Feed />
-            <Fab color="primary" aria-label="add" className={classes.bottom}>
+            <Fab
+                color="primary"
+                aria-label="add"
+                className={classes.bottom}
+                onClick={() => {
+                    history.push("/ask");
+                }}
+            >
                 <AddIcon />
             </Fab>
         </div>

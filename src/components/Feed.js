@@ -62,7 +62,12 @@ const Feed = ({ history }) => {
                                 primary={thread.query}
                                 secondary={
                                     <div>
-                                        <p>asked by {thread.studentName}</p>
+                                        <p>
+                                            asked by{" "}
+                                            {thread.anonymous
+                                                ? "Anonymous"
+                                                : thread.studentName}
+                                        </p>
                                         <Chip
                                             style={{
                                                 float: "right",

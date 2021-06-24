@@ -17,6 +17,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import HomeIcon from "@material-ui/icons/Home";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
+    const history = useHistory();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -78,8 +80,22 @@ const Navbar = () => {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-            <MenuItem onClick={handleMenuClose}>My Threads</MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleMenuClose();
+                    history.push("/profile");
+                }}
+            >
+                Profile
+            </MenuItem>
+            <MenuItem
+                onClick={() => {
+                    handleMenuClose();
+                    history.push("/myThreads");
+                }}
+            >
+                My Threads
+            </MenuItem>
         </Menu>
     );
 
@@ -94,13 +110,21 @@ const Navbar = () => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            <MenuItem>
+            <MenuItem
+                onClick={() => {
+                    history.push("/");
+                }}
+            >
                 <IconButton aria-label="Home" color="inherit">
                     <HomeIcon />
                 </IconButton>
-                <p>Messages</p>
+                <p>Home</p>
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+                onClick={() => {
+                    history.push("/notifications");
+                }}
+            >
                 <IconButton
                     aria-label="show 11 new notifications"
                     color="inherit"
@@ -138,15 +162,33 @@ const Navbar = () => {
                 style={{ background: "#fff", color: "#321c59" }}
             >
                 <Toolbar>
-                    <Typography className={classes.title} variant="h6" noWrap>
-                        Colloque
+                    <Typography
+                        className={classes.title + " logo"}
+                        noWrap
+                        onClick={() => {
+                            history.push("/");
+                        }}
+                    >
+                        <img src="./navlogo.png" />
                     </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
-                        <IconButton aria-label="Home" color="inherit">
+                        <IconButton
+                            aria-label="Home"
+                            color="inherit"
+                            onClick={() => {
+                                history.push("/");
+                            }}
+                        >
                             <HomeIcon />
                         </IconButton>
-                        <IconButton aria-label="Notifications" color="inherit">
+                        <IconButton
+                            aria-label="Notifications"
+                            color="inherit"
+                            onClick={() => {
+                                history.push("/notifications");
+                            }}
+                        >
                             <Badge badgeContent={0} color="secondary">
                                 <NotificationsIcon />
                             </Badge>
