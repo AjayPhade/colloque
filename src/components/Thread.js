@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { firestore } from "../firebase/config";
 import { useParams } from "react-router";
-
+import { TextField } from "@material-ui/core";
+import Switch from "@material-ui/core/Switch";
+import { Button } from "@material-ui/core";
 import Navbar from "./Navbar";
 import dateFormat from "./DateFormat";
 import ThreadReply from "./ThreadReply";
+import { addReply } from "../firebase/firestore";
 
 function Thread() {
     const { id } = useParams();
@@ -12,6 +15,19 @@ function Thread() {
     const [thread, setThread] = useState(null);
     const [facultyReplies, setFacultyReplies] = useState([]);
     const [studentReplies, setStudentReplies] = useState([]);
+    const [reply, setReply] = useState({
+        content: "",
+        anonymous: false,
+        isVerified: true,
+        timestamp: null,
+        repliedBy: null,
+    });
+
+    const handleChange = (e) => {
+        if (e.target.name === "anonymous")
+            setReply({ ...reply, [e.target.name]: e.target.checked });
+        else setReply({ ...reply, [e.target.name]: e.target.value });
+    };
     const threadsRef = firestore.collection("threads");
 
     useEffect(() => {
@@ -21,7 +37,6 @@ function Thread() {
 
             await data.postedBy.get().then((snap) => {
                 setThreadPoster(snap.data());
-                console.log(snap.data());
             });
 
             var items = [];
@@ -32,7 +47,7 @@ function Thread() {
 
             for (const item of items) {
                 const faculty = await item.repliedBy.get();
-                console.log(faculty.data());
+
                 item.facultyName = faculty.data().name;
             }
             setFacultyReplies(items);
@@ -44,7 +59,6 @@ function Thread() {
 
             for (const item of items) {
                 const student = await item.repliedBy.get();
-                console.log(student.data());
                 item.studentName = student.data().name;
             }
             setStudentReplies(items);
@@ -90,17 +104,50 @@ function Thread() {
                     <div className="studentResponses">
                         {studentReplies.map((reply) => {
                             return (
-                                <ThreadReply
-                                    content={reply.content}
-                                    date={dateFormat(reply.timestamp.toDate())}
-                                    name={reply.studentName}
-                                    type={"student"}
-                                    email={threadPoster.email}
-                                    anonymous={reply.anonymous}
-                                />
+                                reply.isVerified && (
+                                    <ThreadReply
+                                        content={reply.content}
+                                        date={dateFormat(
+                                            reply.timestamp.toDate()
+                                        )}
+                                        name={reply.studentName}
+                                        type={"student"}
+                                        email={threadPoster.email}
+                                        anonymous={reply.anonymous}
+                                    />
+                                )
                             );
                         })}
                     </div>
+                    <hr className="replydivider" />
+                    <TextField
+                        name="content"
+                        id="content"
+                        label="Add a reply"
+                        multiline
+                        onChange={handleChange}
+                        fullWidth
+                        rows={8}
+                        variant="outlined"
+                        margin="normal"
+                    />
+                    <p>
+                        Reply Anonymously{" "}
+                        <Switch
+                            name="anonymous"
+                            onChange={handleChange}
+                            color="primary"
+                        />
+                    </p>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        onClick={() => {
+                            addReply(reply, id);
+                        }}
+                    >
+                        Reply
+                    </Button>
                 </div>
             )}{" "}
         </div>

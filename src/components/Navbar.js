@@ -17,6 +17,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import HomeIcon from "@material-ui/icons/Home";
+import navLogo from "../images/navlogo.png";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
@@ -169,7 +170,7 @@ const Navbar = () => {
                             history.push("/");
                         }}
                     >
-                        <img src="./navlogo.png" />
+                        <img src={navLogo} />
                     </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>

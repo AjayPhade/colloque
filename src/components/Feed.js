@@ -50,35 +50,37 @@ const Feed = ({ history }) => {
             <List component="nav" className={classes.root} aria-label="threads">
                 {threads.map((thread) => {
                     return (
-                        <ListItem
-                            button
-                            divider
-                            alignItems="flex-start"
-                            onClick={() => {
-                                openThread(thread);
-                            }}
-                        >
-                            <ListItemText
-                                primary={thread.query}
-                                secondary={
-                                    <div>
-                                        <p>
-                                            asked by{" "}
-                                            {thread.anonymous
-                                                ? "Anonymous"
-                                                : thread.studentName}
-                                        </p>
-                                        <Chip
-                                            style={{
-                                                float: "right",
-                                                marginTop: "-0.4rem",
-                                            }}
-                                            label={thread.subject}
-                                        />
-                                    </div>
-                                }
-                            />
-                        </ListItem>
+                        thread.isVerified && (
+                            <ListItem
+                                button
+                                divider
+                                alignItems="flex-start"
+                                onClick={() => {
+                                    openThread(thread);
+                                }}
+                            >
+                                <ListItemText
+                                    primary={thread.query}
+                                    secondary={
+                                        <div>
+                                            <p>
+                                                asked by{" "}
+                                                {thread.anonymous
+                                                    ? "Anonymous"
+                                                    : thread.studentName}
+                                            </p>
+                                            <Chip
+                                                style={{
+                                                    float: "right",
+                                                    marginTop: "-0.4rem",
+                                                }}
+                                                label={thread.subject}
+                                            />
+                                        </div>
+                                    }
+                                />
+                            </ListItem>
+                        )
                     );
                 })}
             </List>
