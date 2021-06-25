@@ -33,29 +33,42 @@ const addThread = async (thread) => {
         .catch((error) => console.error(error));
 };
 
-const getSubjects = async () => {
-    const student = await firestore
-        .collection("students")
-        .doc(auth.currentUser.uid)
-        .get();
-
-    const courseRef = student.data().course;
-    const year = student.data().year;
-    var allSubjects = await courseRef.get();
-    allSubjects = allSubjects.data();
+const getSubjects = async (user) => {
     const subjects = [];
 
-    for (let i = 1; i <= year; i++) {
-        subjects.push(...allSubjects[i.toString()]);
+    if (user !== null) {
+        var allSubjects = await firestore
+            .collection("courses")
+            .doc("CSE")
+            .get();
+        allSubjects = allSubjects.data();
+
+        for (let i = 1; i <= 3; i++) {
+            subjects.push(...allSubjects[i.toString()]);
+        }
+    } else {
+        const student = await firestore
+            .collection("students")
+            .doc(auth.currentUser.uid)
+            .get();
+
+        const courseRef = student.data().course;
+        const year = student.data().year;
+        var allSubjects = await courseRef.get();
+        allSubjects = allSubjects.data();
+
+        for (let i = 1; i <= year; i++) {
+            subjects.push(...allSubjects[i.toString()]);
+        }
     }
 
     return subjects;
 };
 
-const addReply = async (reply, id) => {
+const addReply = async (reply, type, id) => {
     const uid = auth.currentUser.uid;
     const threadRef = firestore.collection("threads").doc(id);
-    const userRef = firestore.collection("students").doc(uid);
+    const userRef = firestore.collection(type).doc(uid);
 
     if (reply.anonymous === true) {
         reply.isVerified = false;

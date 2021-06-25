@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Home from "./components/Home";
 import Thread from "./components/Thread";
 import Ask from "./components/Ask";
+import MyProfile from "./components/MyProfile";
 
 import { auth } from "./firebase/config";
 
@@ -25,6 +26,7 @@ const App = () => {
                     <PrivateRoute exact path="/" component={Home} />
                     <PrivateRoute path="/thread/:id" component={Thread} />
                     <PrivateRoute path="/ask" component={Ask} />
+                    <PrivateRoute path="/profile" component={MyProfile} />
                 </Switch>
             </Router>
         </AuthProvider>
@@ -32,3 +34,5 @@ const App = () => {
 };
 
 export default App;
+
+//admin pass: admin1234

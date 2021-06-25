@@ -9,6 +9,8 @@ import dateFormat from "./DateFormat";
 import ThreadReply from "./ThreadReply";
 import { addReply } from "../firebase/firestore";
 
+import { auth } from "../firebase/config";
+
 function Thread() {
     const { id } = useParams();
     const [threadPoster, setThreadPoster] = useState(null);
@@ -22,6 +24,9 @@ function Thread() {
         timestamp: null,
         repliedBy: null,
     });
+
+    // console.log(auth.currentUser);
+    const type = auth.currentUser.photoURL === null ? "students" : "faculty";
 
     const handleChange = (e) => {
         if (e.target.name === "anonymous")
@@ -131,19 +136,22 @@ function Thread() {
                         variant="outlined"
                         margin="normal"
                     />
-                    <p>
-                        Reply Anonymously{" "}
-                        <Switch
-                            name="anonymous"
-                            onChange={handleChange}
-                            color="primary"
-                        />
-                    </p>
+
+                    {type === "students" && (
+                        <div>
+                            Reply Anonymously{" "}
+                            <Switch
+                                name="anonymous"
+                                onChange={handleChange}
+                                color="primary"
+                            />
+                        </div>
+                    )}
                     <Button
                         color="primary"
                         variant="contained"
                         onClick={() => {
-                            addReply(reply, id);
+                            addReply(reply, type, id);
                         }}
                     >
                         Reply

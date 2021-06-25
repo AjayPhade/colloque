@@ -1,20 +1,19 @@
-import React, { useState, useContext } from "react";
-import Avatar from "@material-ui/core/Avatar";
+import React, { useState, useContext, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
 
-import { NavLink, Redirect } from "react-router-dom";
+import { getSubjects } from "../firebase/firestore";
+
+import { NavLink, Redirect, useLocation } from "react-router-dom";
 import { withRouter } from "react-router";
 
 import * as auth from "../firebase/auth";
@@ -38,10 +37,29 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    root: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        listStyle: "none",
+        padding: theme.spacing(0.5),
+        margin: 0,
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
 }));
 
-const SignUp = ({ history }) => {
+// A custom hook that builds on useLocation to parse
+// the query string for you.
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
+function SignUp({ history }) {
     const classes = useStyles();
+    const query = useQuery();
+    const type = query.get("type");
 
     const [user, setUser] = useState({
         email: "",
@@ -52,16 +70,39 @@ const SignUp = ({ history }) => {
         course: "",
         role: "student",
         threads: [],
+        replies: [],
         strikes: 0,
     });
+
+    const [subjects, setSubjects] = useState([]);
+
+    useEffect(async () => {
+        setSubjects(
+            await getSubjects({ type: "faculty", department: user.department })
+        );
+    }, []);
 
     const handleChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
-        await auth.signUp(user);
+        e.preventDefault();
+        await auth.signUp(user, type, checkedSubjects);
         history.push("/");
+    };
+
+    const [checkedSubjects, setCheckedSubjects] = useState([]);
+
+    const addSubjectChip = (subject) => {
+        if (!checkedSubjects.includes(subject))
+            setCheckedSubjects([...checkedSubjects, subject]);
+    };
+
+    const handleDelete = (subjectToDelete) => () => {
+        setCheckedSubjects((subjects) =>
+            subjects.filter((subject) => subject !== subjectToDelete)
+        );
     };
 
     const { currentUser } = useContext(AuthContext);
@@ -115,57 +156,142 @@ const SignUp = ({ history }) => {
                                 onChange={handleChange}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel id="department">
-                                    Department
-                                </InputLabel>
-                                <Select
-                                    labelId="department"
-                                    name="department"
-                                    label="Department"
-                                    fullWidth
-                                    value={user.department}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={"CSE"}>
-                                        Computer Science
-                                    </MenuItem>
-                                    <MenuItem value={"MECH"}>
-                                        Mechanical
-                                    </MenuItem>
-                                    <MenuItem value={"Civil"}>Civil</MenuItem>
-                                    <MenuItem value={"IT"}>
-                                        Information Technology
-                                    </MenuItem>
-                                    <MenuItem value={"ELN"}>
-                                        Electronics
-                                    </MenuItem>
-                                    <MenuItem value={"ENTC"}>
-                                        Electronics and Telecommunications
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormControl variant="outlined" fullWidth>
-                                <InputLabel id="year">Year</InputLabel>
-                                <Select
-                                    labelId="year"
-                                    name="year"
-                                    label="Year"
-                                    fullWidth
-                                    value={user.year}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value={1}>First</MenuItem>
-                                    <MenuItem value={2}>Second</MenuItem>
-                                    <MenuItem value={3}>Third</MenuItem>
-                                    <MenuItem value={4}>Fourth</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
+
+                        {type !== "faculty" ? (
+                            <Grid item xs={6}>
+                                <FormControl variant="outlined" fullWidth>
+                                    <InputLabel id="department">
+                                        Department
+                                    </InputLabel>
+                                    <Select
+                                        labelId="department"
+                                        name="department"
+                                        label="Department"
+                                        fullWidth
+                                        value={user.department}
+                                        onChange={handleChange}
+                                    >
+                                        <MenuItem value={"CSE"}>
+                                            Computer Science
+                                        </MenuItem>
+                                        <MenuItem value={"MECH"}>
+                                            Mechanical
+                                        </MenuItem>
+                                        <MenuItem value={"Civil"}>
+                                            Civil
+                                        </MenuItem>
+                                        <MenuItem value={"IT"}>
+                                            Information Technology
+                                        </MenuItem>
+                                        <MenuItem value={"ELN"}>
+                                            Electronics
+                                        </MenuItem>
+                                        <MenuItem value={"ENTC"}>
+                                            Electronics and Telecommunications
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        ) : (
+                            <Grid item xs={12}>
+                                <FormControl variant="outlined" fullWidth>
+                                    <InputLabel id="department">
+                                        Department
+                                    </InputLabel>
+                                    <Select
+                                        labelId="department"
+                                        name="department"
+                                        label="Department"
+                                        fullWidth
+                                        value={user.department}
+                                        onChange={handleChange}
+                                    >
+                                        <MenuItem value={"CSE"}>
+                                            Computer Science
+                                        </MenuItem>
+                                        <MenuItem value={"MECH"}>
+                                            Mechanical
+                                        </MenuItem>
+                                        <MenuItem value={"Civil"}>
+                                            Civil
+                                        </MenuItem>
+                                        <MenuItem value={"IT"}>
+                                            Information Technology
+                                        </MenuItem>
+                                        <MenuItem value={"ELN"}>
+                                            Electronics
+                                        </MenuItem>
+                                        <MenuItem value={"ENTC"}>
+                                            Electronics and Telecommunications
+                                        </MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        )}
+
+                        {type !== "faculty" && (
+                            <Grid item xs={6}>
+                                <FormControl variant="outlined" fullWidth>
+                                    <InputLabel id="year">Year</InputLabel>
+                                    <Select
+                                        labelId="year"
+                                        name="year"
+                                        label="Year"
+                                        fullWidth
+                                        value={user.year}
+                                        onChange={handleChange}
+                                    >
+                                        <MenuItem value={1}>First</MenuItem>
+                                        <MenuItem value={2}>Second</MenuItem>
+                                        <MenuItem value={3}>Third</MenuItem>
+                                        <MenuItem value={4}>Fourth</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        )}
                     </Grid>
+
+                    {/* To select the subjects taught by faculty */}
+                    {type === "faculty" && (
+                        <div>
+                            <Autocomplete
+                                id="subject"
+                                options={subjects}
+                                fullWidth
+                                onChange={(event, value) => {
+                                    if (value) addSubjectChip(value);
+                                }}
+                                getOptionLabel={(option) => option}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        name="subject"
+                                        fullWidth
+                                        label="Subject"
+                                        variant="outlined"
+                                    />
+                                )}
+                            />
+                            <Paper component="ul" className={classes.root}>
+                                {checkedSubjects.map((subject, index) => {
+                                    let icon;
+
+                                    return (
+                                        <li key={index}>
+                                            <Chip
+                                                icon={icon}
+                                                label={subject}
+                                                onDelete={handleDelete(subject)}
+                                                className={classes.chip}
+                                            />
+                                        </li>
+                                    );
+                                })}
+                            </Paper>
+                        </div>
+                    )}
+
                     <Button
                         type="submit"
                         fullWidth
@@ -187,6 +313,6 @@ const SignUp = ({ history }) => {
             </div>
         </Container>
     );
-};
+}
 
 export default withRouter(SignUp);

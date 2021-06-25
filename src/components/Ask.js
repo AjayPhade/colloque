@@ -25,7 +25,7 @@ function Ask() {
     const [subjects, setSubjects] = useState([]);
 
     useEffect(async () => {
-        setSubjects(await getSubjects());
+        setSubjects(await getSubjects(null));
     }, []);
 
     const handleChange = (e) => {

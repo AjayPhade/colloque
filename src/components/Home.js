@@ -7,6 +7,8 @@ import AddIcon from "@material-ui/icons/Add";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router";
 
+import { auth } from "../firebase/config";
+
 const useStyles = makeStyles((theme) => ({
     margin: {
         margin: theme.spacing(1),
@@ -23,20 +25,23 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
     const history = useHistory();
     const classes = useStyles();
+
     return (
         <div>
             <Navbar />
             <Feed />
-            <Fab
-                color="primary"
-                aria-label="add"
-                className={classes.bottom}
-                onClick={() => {
-                    history.push("/ask");
-                }}
-            >
-                <AddIcon />
-            </Fab>
+            {!auth.currentUser.photoURL && (
+                <Fab
+                    color="primary"
+                    aria-label="add"
+                    className={classes.bottom}
+                    onClick={() => {
+                        history.push("/ask");
+                    }}
+                >
+                    <AddIcon />
+                </Fab>
+            )}
         </div>
     );
 };
