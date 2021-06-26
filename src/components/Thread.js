@@ -28,7 +28,7 @@ function Thread() {
         votes: 0,
     });
     const { currentUserDetails } = useContext(AuthContext);
-    const [votes, setVotes] = useState({ 0: false });
+    const [votes, setVotes] = useState({});
 
     // console.log(auth.currentUser);
     const type = auth.currentUser.photoURL === null ? "students" : "faculty";
@@ -138,6 +138,7 @@ function Thread() {
                                         name={reply.facultyName}
                                         type={"faculty"}
                                         email={threadPoster.email}
+                                        key={reply.timestamp}
                                     />
                                 );
                             })}
@@ -171,6 +172,7 @@ function Thread() {
                                             }
                                             index={index}
                                             threadID={id}
+                                            key={reply.timestamp}
                                         />
                                     )
                                 );

@@ -3,7 +3,6 @@ import { TextField } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { addThread, getSubjects } from "../firebase/firestore";
-import { auth, firestore } from "../firebase/config";
 import { withRouter } from "react-router";
 
 import Navbar from "./Navbar";
@@ -25,8 +24,10 @@ function Ask({ history }) {
 
     const [subjects, setSubjects] = useState([]);
 
-    useEffect(async () => {
-        setSubjects(await getSubjects(null));
+    useEffect(() => {
+        (async () => {
+            setSubjects(await getSubjects(null));
+        })();
     }, []);
 
     const handleChange = (e) => {

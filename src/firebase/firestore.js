@@ -108,7 +108,7 @@ const decodeText = (str) => {
 
 const encodeText = (str) => {
     str = str.replace(/\n/g, "\\n");
-    str = str.replace(/  /g, "\\t");
+    str = str.replace(/ {2}/g, "\\t");
     return str;
 };
 

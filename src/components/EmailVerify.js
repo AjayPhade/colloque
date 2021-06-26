@@ -15,7 +15,7 @@ const EmailVerify = () => {
             </Button>
 
             <div className="emailVerify">
-                <img src="./emailverify.png" />
+                <img src="./emailverify.png" alt="Verify Email" />
             </div>
         </div>
     );

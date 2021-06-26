@@ -10,8 +10,6 @@ import Thread from "./components/Thread";
 import Ask from "./components/Ask";
 import MyProfile from "./components/MyProfile";
 
-import { auth } from "./firebase/config";
-
 const App = () => {
     return (
         <AuthProvider>

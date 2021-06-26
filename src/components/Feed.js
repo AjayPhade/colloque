@@ -37,7 +37,7 @@ const Feed = ({ history }) => {
 
             setThreads(items);
         });
-    }, []);
+    }, [threadsRef]);
 
     const classes = useStyles();
 

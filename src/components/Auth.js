@@ -15,8 +15,11 @@ export const AuthProvider = ({ children }) => {
         auth.onAuthStateChanged(setCurrentUser);
     }, []);
 
-    useEffect(async () => {
-        if (currentUser !== "") setCurrentUserDetails(await getUserDetails());
+    useEffect(() => {
+        (async () => {
+            if (currentUser !== "")
+                setCurrentUserDetails(await getUserDetails());
+        })();
     }, [currentUser]);
 
     return (

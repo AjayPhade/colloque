@@ -3,7 +3,6 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
@@ -77,10 +76,14 @@ function SignUp({ history }) {
 
     const [subjects, setSubjects] = useState([]);
 
-    useEffect(async () => {
-        setSubjects(
-            await getSubjects({ type: "faculty", department: user.department })
-        );
+    useEffect(() => {
+        (async () =>
+            setSubjects(
+                await getSubjects({
+                    type: "faculty",
+                    department: user.department,
+                })
+            ))();
     }, []);
 
     const handleChange = (e) => {
