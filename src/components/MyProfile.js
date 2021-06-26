@@ -50,7 +50,6 @@ function MyProfile(props) {
                                     label="Name"
                                     name="name"
                                     onChange={handleChange}
-                                    required
                                     value={user.name}
                                     variant="outlined"
                                     InputProps={{ readOnly: true }}
@@ -62,7 +61,6 @@ function MyProfile(props) {
                                     label="Email Address"
                                     name="email"
                                     onChange={handleChange}
-                                    required
                                     value={user.email}
                                     variant="outlined"
                                     InputProps={{ readOnly: true }}
@@ -85,7 +83,6 @@ function MyProfile(props) {
                                     label="Year"
                                     name="year"
                                     onChange={handleChange}
-                                    required
                                     value={user.year}
                                     variant="outlined"
                                     InputProps={{ readOnly: true }}
@@ -97,7 +94,6 @@ function MyProfile(props) {
                                     label="Role"
                                     name="role"
                                     onChange={handleChange}
-                                    required
                                     value={user.role}
                                     variant="outlined"
                                     disabled

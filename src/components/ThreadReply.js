@@ -31,7 +31,9 @@ function ThreadReply(props) {
     return (
         <Card variant="outlined" className={classes.root + " card"}>
             <CardContent>
-                <Typography component="h1">{props.content}</Typography>
+                <Typography component="h1">
+                    <pre>{props.content}</pre>
+                </Typography>
             </CardContent>
             <CardActions className="cardactions">
                 <div>

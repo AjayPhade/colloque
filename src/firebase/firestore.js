@@ -3,6 +3,7 @@ import { firestore } from "./config";
 import { auth } from "./config";
 
 const addThread = async (thread) => {
+    thread.description = encodeText(thread.description);
     const uid = auth.currentUser.uid;
     const userRef = firestore.collection("students").doc(uid);
     const threadsRef = firestore.collection("threads");
@@ -37,7 +38,7 @@ const getSubjects = async (user) => {
     const subjects = [];
 
     if (user !== null) {
-        var allSubjects = await firestore
+        let allSubjects = await firestore
             .collection("courses")
             .doc("CSE")
             .get();
@@ -54,7 +55,7 @@ const getSubjects = async (user) => {
 
         const courseRef = student.data().course;
         const year = student.data().year;
-        var allSubjects = await courseRef.get();
+        let allSubjects = await courseRef.get();
         allSubjects = allSubjects.data();
 
         for (let i = 1; i <= year; i++) {
@@ -66,6 +67,7 @@ const getSubjects = async (user) => {
 };
 
 const addReply = async (reply, type, id) => {
+    reply.content = encodeText(reply.content);
     const uid = auth.currentUser.uid;
     const threadRef = firestore.collection("threads").doc(id);
     const userRef = firestore.collection(type).doc(uid);
@@ -98,4 +100,16 @@ const addReply = async (reply, type, id) => {
     });
 };
 
-export { addThread, addReply, getSubjects };
+const decodeText = (str) => {
+    str = str.replace(/\\n/g, "\n");
+    str = str.replace(/\\t/g, "  ");
+    return str;
+};
+
+const encodeText = (str) => {
+    str = str.replace(/\n/g, "\\n");
+    str = str.replace(/  /g, "\\t");
+    return str;
+};
+
+export { addThread, addReply, getSubjects, decodeText };

@@ -37,7 +37,7 @@ function Ask() {
     return (
         <div>
             <Navbar />
-            <form className="askForm">
+            <form autoComplete="off" className="askForm">
                 <TextField
                     fullWidth
                     onChange={handleChange}

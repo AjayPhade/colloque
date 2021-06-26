@@ -8,7 +8,11 @@ const theme = createMuiTheme({
         },
         secondary: {
             // This is green.A700 as hex.
-            main: "#77ACF1",
+            main: "#ba000d",
+            danger: "#ff0000",
+        },
+        danger: {
+            main: "#ff0000",
         },
     },
 });
