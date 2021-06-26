@@ -4,11 +4,12 @@ import Switch from "@material-ui/core/Switch";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { addThread, getSubjects } from "../firebase/firestore";
 import { auth, firestore } from "../firebase/config";
+import { withRouter } from "react-router";
 
 import Navbar from "./Navbar";
 import { Button } from "@material-ui/core";
 
-function Ask() {
+function Ask({ history }) {
     const [thread, setThread] = useState({
         query: "",
         description: "",
@@ -93,6 +94,7 @@ function Ask() {
                     variant="contained"
                     onClick={() => {
                         addThread(thread);
+                        history.push("/");
                     }}
                 >
                     Post
@@ -102,4 +104,4 @@ function Ask() {
     );
 }
 
-export default Ask;
+export default withRouter(Ask);

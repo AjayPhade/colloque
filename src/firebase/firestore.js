@@ -112,4 +112,59 @@ const encodeText = (str) => {
     return str;
 };
 
-export { addThread, addReply, getSubjects, decodeText };
+const getUserDetails = async () => {
+    if (auth.currentUser !== null) {
+        const uid = auth.currentUser.uid;
+        const userRef = firestore.collection("students").doc(uid);
+        const userDetails = (await userRef.get()).data();
+        // console.log(userDetails);
+        return userDetails;
+    }
+};
+
+const addVote = async (threadRef, index, currentUserDetails) => {
+    let thread = await threadRef.get();
+    let replies = thread.data().studentReplies;
+    // console.log(replies);
+    replies[index].votes += 1;
+
+    await threadRef
+        .update({ studentReplies: replies })
+        .then(() => {
+            let votes = currentUserDetails.votes;
+
+            if (votes.length === 0) {
+                votes.push({ thread: threadRef, [index]: true });
+            } else {
+                let found = false;
+                for (let i = 0; i < votes.length; i++) {
+                    if (votes[i].thread.id === threadRef.id) {
+                        votes[i][index.toString()] = true;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) votes.push({ thread: threadRef, [index]: true });
+            }
+
+            const uid = auth.currentUser.uid;
+
+            firestore
+                .collection("students")
+                .doc(uid)
+                .update({ votes })
+                .then(() => {})
+                .catch((error) => console.error(error));
+        })
+        .catch((error) => console.error(error));
+};
+
+export {
+    addThread,
+    addReply,
+    getSubjects,
+    decodeText,
+    getUserDetails,
+    addVote,
+};

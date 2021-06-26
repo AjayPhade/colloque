@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { firestore } from "../firebase/config";
 import { useParams } from "react-router";
 import { TextField } from "@material-ui/core";
 import Switch from "@material-ui/core/Switch";
 import { Button } from "@material-ui/core";
+
+import { addReply, decodeText } from "../firebase/firestore";
+import { auth } from "../firebase/config";
+
 import Navbar from "./Navbar";
 import dateFormat from "./DateFormat";
 import ThreadReply from "./ThreadReply";
-import { addReply, decodeText } from "../firebase/firestore";
-
-import { auth } from "../firebase/config";
+import { AuthContext } from "./Auth";
 
 function Thread() {
     const { id } = useParams();
@@ -23,7 +25,10 @@ function Thread() {
         isVerified: true,
         timestamp: null,
         repliedBy: null,
+        votes: 0,
     });
+    const { currentUserDetails } = useContext(AuthContext);
+    const [votes, setVotes] = useState({ 0: false });
 
     // console.log(auth.currentUser);
     const type = auth.currentUser.photoURL === null ? "students" : "faculty";
@@ -34,6 +39,8 @@ function Thread() {
         else setReply({ ...reply, [e.target.name]: e.target.value });
     };
     const threadsRef = firestore.collection("threads");
+    const threadRef = threadsRef.doc(id);
+
     const closeThread = () => {
         threadsRef
             .doc(id)
@@ -42,7 +49,7 @@ function Thread() {
     };
 
     useEffect(() => {
-        threadsRef.doc(id).onSnapshot(async (snap) => {
+        threadRef.onSnapshot(async (snap) => {
             const data = snap.data();
             data.description = decodeText(data.description);
             setThread(data);
@@ -77,6 +84,23 @@ function Thread() {
             setStudentReplies(items);
         });
     }, []);
+
+    useEffect(() => {
+        // check the votes of current user
+        if (currentUserDetails !== "") {
+            let votes = currentUserDetails.votes;
+            // console.log(votes);
+
+            for (let i = 0; i < votes.length; i++) {
+                if (votes[i].thread.id === threadRef.id) {
+                    setVotes(votes[i]);
+                    // console.log(votes[i].votes);
+                    break;
+                }
+            }
+        }
+    }, [currentUserDetails]);
+
     return (
         <div>
             <Navbar />
@@ -96,7 +120,9 @@ function Thread() {
                                 </p>
                             </div>
                         </div>
-                        <p className="threadDesc">{thread.description}</p>
+                        <div className="threadDesc">
+                            <pre>{thread.description}</pre>
+                        </div>
                     </div>
                     <hr />
                     <h2>Faculty Replies</h2>
@@ -125,7 +151,7 @@ function Thread() {
                     <h2>Student Replies</h2>
                     {studentReplies.length ? (
                         <div className="studentResponses">
-                            {studentReplies.map((reply) => {
+                            {studentReplies.map((reply, index) => {
                                 return (
                                     reply.isVerified && (
                                         <ThreadReply
@@ -137,6 +163,14 @@ function Thread() {
                                             type={"student"}
                                             email={threadPoster.email}
                                             anonymous={reply.anonymous}
+                                            votes={reply.votes}
+                                            voted={votes[index.toString()]}
+                                            threadRef={threadRef}
+                                            currentUserDetails={
+                                                currentUserDetails
+                                            }
+                                            index={index}
+                                            threadID={id}
                                         />
                                     )
                                 );

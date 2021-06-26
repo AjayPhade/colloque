@@ -14,7 +14,8 @@ const signOut = () => {
 
 const signUp = async (user, type, checkedSubjects) => {
     const { email, password } = user;
-    const { name, role, strikes, department, year, threads, replies } = user;
+    const { name, role, strikes, department, year, threads, replies, votes } =
+        user;
 
     //checking for faculty signup
 
@@ -69,6 +70,7 @@ const signUp = async (user, type, checkedSubjects) => {
                         year,
                         threads,
                         course,
+                        votes,
                     })
                     .catch((error) => {
                         console.error(error);

@@ -8,6 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { auth } from "../firebase/config";
+import { addVote } from "../firebase/firestore";
+
+import Vote from "./Vote";
 
 const useStyles = makeStyles({
     root: {
@@ -28,6 +31,7 @@ const useStyles = makeStyles({
 
 function ThreadReply(props) {
     const classes = useStyles();
+
     return (
         <Card variant="outlined" className={classes.root + " card"}>
             <CardContent>
@@ -47,6 +51,30 @@ function ThreadReply(props) {
                     >
                         {props.date}
                     </Typography>
+                </div>
+                <div>
+                    {props.votes}
+                    {props.type !== "faculty" ? (
+                        props.voted ? (
+                            <Button disabled>
+                                <Vote />
+                            </Button>
+                        ) : (
+                            <Button
+                                color="primary"
+                                onClick={async () => {
+                                    await addVote(
+                                        props.threadRef,
+                                        props.index,
+                                        props.currentUserDetails
+                                    );
+                                    window.location.reload();
+                                }}
+                            >
+                                <Vote />
+                            </Button>
+                        )
+                    ) : null}
                 </div>
                 {props.email === auth.currentUser.email &&
                     props.type === "faculty" && (

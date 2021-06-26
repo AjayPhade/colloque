@@ -72,6 +72,7 @@ function SignUp({ history }) {
         threads: [],
         replies: [],
         strikes: 0,
+        votes: [],
     });
 
     const [subjects, setSubjects] = useState([]);
