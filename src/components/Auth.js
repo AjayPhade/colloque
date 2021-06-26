@@ -16,10 +16,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        (async () => {
-            if (currentUser !== "")
-                setCurrentUserDetails(await getUserDetails());
-        })();
+        if (currentUser !== "") getUserDetails(setCurrentUserDetails);
     }, [currentUser]);
 
     return (

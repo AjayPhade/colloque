@@ -46,45 +46,42 @@ const Feed = ({ history }) => {
     };
 
     return (
-        <div>
-            <List component="nav" className={classes.root} aria-label="threads">
-                {threads.map((thread) => {
-                    return (
-                        thread.isVerified && (
-                            <ListItem
-                                button
-                                divider
-                                alignItems="flex-start"
-                                onClick={() => {
-                                    openThread(thread);
-                                }}
-                            >
-                                <ListItemText
-                                    primary={thread.query}
-                                    secondary={
-                                        <div>
-                                            <p>
-                                                asked by{" "}
-                                                {thread.anonymous
-                                                    ? "Anonymous"
-                                                    : thread.studentName}
-                                            </p>
-                                            <Chip
-                                                style={{
-                                                    float: "right",
-                                                    marginTop: "-0.4rem",
-                                                }}
-                                                label={thread.subject}
-                                            />
-                                        </div>
-                                    }
-                                />
-                            </ListItem>
-                        )
-                    );
-                })}
-            </List>
-        </div>
+        <List component="nav" className={classes.root} aria-label="threads">
+            {threads.map((thread) => {
+                return (
+                    thread.isVerified && (
+                        <ListItem
+                            button
+                            divider
+                            alignItems="flex-start"
+                            onClick={() => {
+                                openThread(thread);
+                            }}
+                            key={thread.id}
+                        >
+                            <ListItemText
+                                primary={thread.query}
+                                secondary={
+                                    <div>
+                                        asked by{" "}
+                                        {thread.anonymous
+                                            ? "Anonymous"
+                                            : thread.studentName}
+                                        <Chip
+                                            style={{
+                                                float: "right",
+                                                marginTop: "-0.4rem",
+                                            }}
+                                            label={thread.subject}
+                                        />
+                                    </div>
+                                }
+                            />
+                        </ListItem>
+                    )
+                );
+            })}
+        </List>
     );
 };
 

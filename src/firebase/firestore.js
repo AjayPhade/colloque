@@ -112,13 +112,13 @@ const encodeText = (str) => {
     return str;
 };
 
-const getUserDetails = async () => {
+const getUserDetails = (setCurrentUserDetails) => {
     if (auth.currentUser !== null) {
         const uid = auth.currentUser.uid;
         const userRef = firestore.collection("students").doc(uid);
-        const userDetails = (await userRef.get()).data();
-        // console.log(userDetails);
-        return userDetails;
+        userRef.onSnapshot((snap) => {
+            setCurrentUserDetails(snap.data());
+        });
     }
 };
 

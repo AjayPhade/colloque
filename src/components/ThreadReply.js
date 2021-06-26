@@ -68,7 +68,6 @@ function ThreadReply(props) {
                                         props.index,
                                         props.currentUserDetails
                                     );
-                                    window.location.reload();
                                 }}
                             >
                                 <Vote />

@@ -86,10 +86,9 @@ function Thread() {
     }, []);
 
     useEffect(() => {
-        // check the votes of current user
+        // check and set votes of current user
         if (currentUserDetails !== "") {
             let votes = currentUserDetails.votes;
-            // console.log(votes);
 
             for (let i = 0; i < votes.length; i++) {
                 if (votes[i].thread.id === threadRef.id) {
