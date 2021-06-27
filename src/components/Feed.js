@@ -96,18 +96,22 @@ const Feed = ({ history }) => {
                 item.studentName = student.data().name;
             }
 
+            items.reverse();
             setThreads(items);
             setFilteredThreads(items);
             // console.log("threadsRef");
         });
     }, []);
+
     //get list of subjects to filter
     useEffect(async () => {
         if (currentUserDetails !== "") {
             // console.log(currentUserDetails);
             if (currentUser.photoURL === null) {
                 setSubjects(await getSubjects(null));
-            } else setSubjects(currentUserDetails.subjects);
+            } else {
+                setSubjects(currentUserDetails.subjects);
+            }
         }
     }, [currentUserDetails]);
 

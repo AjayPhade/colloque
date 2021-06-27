@@ -180,17 +180,6 @@ const Navbar = () => {
                             <HomeIcon />
                         </IconButton>
                         <IconButton
-                            aria-label="Notifications"
-                            color="inherit"
-                            onClick={() => {
-                                history.push("/notifications");
-                            }}
-                        >
-                            <Badge badgeContent={0} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
-                        <IconButton
                             aria-label="account of current user"
                             aria-controls={menuId}
                             aria-haspopup="true"
