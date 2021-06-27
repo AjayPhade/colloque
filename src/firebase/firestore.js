@@ -115,7 +115,12 @@ const encodeText = (str) => {
 const getUserDetails = (setCurrentUserDetails) => {
     if (auth.currentUser !== null) {
         const uid = auth.currentUser.uid;
-        const userRef = firestore.collection("students").doc(uid);
+        let userRef;
+
+        // photoURL of student is null to differentiate between student and faculty
+        if (auth.currentUser.photoURL === null)
+            userRef = firestore.collection("students").doc(uid);
+        else userRef = firestore.collection("faculty").doc(uid);
         userRef.onSnapshot((snap) => {
             setCurrentUserDetails(snap.data());
         });
@@ -150,12 +155,21 @@ const addVote = async (threadRef, index, currentUserDetails) => {
 
             const uid = auth.currentUser.uid;
 
-            firestore
-                .collection("students")
-                .doc(uid)
-                .update({ votes })
-                .then(() => {})
-                .catch((error) => console.error(error));
+            // photoURL of student is null to differentiate between student and faculty
+            if (auth.currentUser.photoURL === null)
+                firestore
+                    .collection("students")
+                    .doc(uid)
+                    .update({ votes })
+                    .then(() => {})
+                    .catch((error) => console.error(error));
+            else
+                firestore
+                    .collection("faculty")
+                    .doc(uid)
+                    .update({ votes })
+                    .then(() => {})
+                    .catch((error) => console.error(error));
         })
         .catch((error) => console.error(error));
 };

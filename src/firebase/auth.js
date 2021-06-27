@@ -38,6 +38,7 @@ const signUp = async (user, type, checkedSubjects) => {
                         email,
                         department,
                         replies,
+                        votes,
                         subjects: checkedSubjects,
                     })
                     .catch((error) => {
